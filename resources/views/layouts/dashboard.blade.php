@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/iconly.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/simple-datatables/style.css') }}"/>
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/table-datatables.css') }}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 
 <body>
@@ -146,18 +147,29 @@
             </footer>
         </div>
     </div>
+
     <script src="{{ asset('mazer/dist/assets/static/js/components/dark.js') }}"></script>
     <script src="{{ asset('mazer/dist/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
     <script src="{{ asset('mazer/dist/assets/compiled/js/app.js') }}"></script>
 
     <!-- Need: Apexcharts -->
-    <script src="{{ asset('mazer/dist/assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('mazer/dist/assets/static/js/pages/dashboard.js') }}"></script>
+    {{-- <script src="{{ asset('mazer/dist/assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('mazer/dist/assets/static/js/pages/dashboard.js') }}"></script> --}}
     
     {{-- dibuthkan untuk handle datables --}}
-    <script src="{{ asset('mazer/dist/assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
-    <script src="{{ asset('mazer/dist/assets/static/js/pages/simple-datatables.js') }}"></script>
+    {{-- <script src="{{ asset('mazer/dist/assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
+    <script src="{{ asset('mazer/dist/assets/static/js/pages/simple-datatables.js') }}"></script> --}}
+
+    {{-- flatpickr --}}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        let dateTime = flatpickr('.datetime', {
+            dateFormat: "Y-m-d",
+        });
+    </script>
+
+    @stack('scripts')
 
 </body>
 

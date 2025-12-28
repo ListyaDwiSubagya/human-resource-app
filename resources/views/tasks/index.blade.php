@@ -38,6 +38,10 @@
                         <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3 ms-auto">New Task</a>
                     </div>
 
+                    @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
+
                     <table class="table table-striped" id="table1">
                         <thead>
                             <tr>
@@ -66,14 +70,20 @@
                           
                                 </td>
                                 <td>
-                                    <a href="" class="btn btn-info btn-sm">View</a>
+                                    <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-info btn-sm">View</a>
                                     @if ($task->status == 'pending' )
-                                        <a href="" class="btn btn-success btn-sm">Mark as Done</a>
+                                        <a href="{{ route('tasks.done', $task->id) }}" class="btn btn-success btn-sm">Mark as Done</a>
                                     @else
-                                        <a href="" class="btn btn-warning btn-sm">Mark as Pending</a>
+                                        <a href="{{ route('tasks.pending', $task->id) }}" class="btn btn-warning btn-sm">Mark as Pending</a>
                                     @endif
-                                    <a href="" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" 
+                                        method="POST" style="display: inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
 
