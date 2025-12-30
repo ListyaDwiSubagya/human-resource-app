@@ -13,7 +13,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // handle employee
-Route::resource('/employee', EmployeeController::class);
+Route::resource('/employees', EmployeeController::class);
 
 // handle tasks
 Route::resource('/tasks', TaskController::class);
