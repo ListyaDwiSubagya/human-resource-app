@@ -11,14 +11,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Task</h3>
-                    <p class="text-subtitle text-muted">Handle employee tasks</p>
+                    <h3>Department</h3>
+                    <p class="text-subtitle text-muted">Handle departmen data</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Task</li>
+                            <li class="breadcrumb-item" aria-current="page">Department</li>
                             <li class="breadcrumb-item active" aria-current="page">Index</li>
                         </ol>
                     </nav>
@@ -35,7 +35,7 @@
                 <div class="card-body">
 
                     <div class="d-flex">
-                        <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3 ms-auto">New Task</a>
+                        <a href="{{ route('departments.create') }}" class="btn btn-primary mb-3 ms-auto">New Department</a>
                     </div>
 
                     @if (session('success'))
@@ -45,40 +45,31 @@
                     <table class="table table-striped" id="table1">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Assigned To</th>
-                                <th>Due Date</th>
+                                <th>Name</th>
+                                <th>Description</th>
                                 <th>Status</th>
                                 <th>option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($tasks as $task)
+                            @foreach ($departments as $department)
                                 
                             <tr>
-                                <td>{{ $task->title}}</td>
-                                <td>{{ $task->employee->fullname}}</td>
-                                <td>{{ $task->due_date}}</td>
+                                <td>{{ $department->name}}</td>
+                                <td>{{ $department->description}}</td>
                                 <td>
-                                    @if ($task->status == 'pending')
-                                        <span class="text-warning">Pending</span>
-                                    @elseif ($task->status == 'done')
-                                        <span class="text-success">Done</span>
+                                    @if ($department->status == 'inactive')
+                                        <span class="text-warning">Inactive</span>
                                     @else
-                                        <span class="text-info">{{ $task->status }}</span>    
+                                        <span class="text-success">Active</span>
                                     @endif
                           
                                 </td>
                                 <td>
-                                    <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-info btn-sm">View</a>
-                                    @if ($task->status == 'pending' )
-                                        <a href="{{ route('tasks.done', $task->id) }}" class="btn btn-success btn-sm">Mark as Done</a>
-                                    @else
-                                        <a href="{{ route('tasks.pending', $task->id) }}" class="btn btn-warning btn-sm">Mark as Pending</a>
-                                    @endif
-                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                   
+                                    <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                     
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" 
+                                    <form action="{{ route('departments.destroy', $department->id) }}" 
                                         method="POST" style="display: inline">
                                         @csrf
                                         @method('DELETE')
