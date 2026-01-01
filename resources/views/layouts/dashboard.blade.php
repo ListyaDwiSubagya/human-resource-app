@@ -102,7 +102,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="{{ route('presences.index') }}" class='sidebar-link'>
                                 <i class="bi bi-table"></i>
                                 <span>Presences</span>
                             </a>
@@ -166,6 +166,9 @@
     <script>
         let dateTime = flatpickr('.datetime', {
             dateFormat: "Y-m-d",
+        });
+        let dateTimehour = flatpickr('.datetime', {
+            dateFormat: "Y-m-d H:i:s",
         });
     </script>
 
