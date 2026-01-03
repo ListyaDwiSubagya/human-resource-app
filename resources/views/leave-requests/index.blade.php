@@ -11,14 +11,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Payroll</h3>
-                    <p class="text-subtitle text-muted">Manage payroll data</p>
+                    <h3>Leave Request</h3>
+                    <p class="text-subtitle text-muted">Manage leave request data</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Payroll</li>
+                            <li class="breadcrumb-item" aria-current="page">Leave Request</li>
                             <li class="breadcrumb-item active" aria-current="page">Index</li>
                         </ol>
                     </nav>
@@ -35,7 +35,7 @@
                 <div class="card-body">
 
                     <div class="d-flex">
-                        <a href="{{ route('payrolls.create') }}" class="btn btn-primary mb-3 ms-auto">New Payroll</a>
+                        <a href="{{ route('leave-requests.create') }}" class="btn btn-primary mb-3 ms-auto">New Leave Request</a>
                     </div>
 
                     @if (session('success'))
@@ -46,30 +46,39 @@
                         <thead>
                             <tr>
                                 <th>Employee</th>
-                                <th>Salary</th>
-                                <th>Bonuses</th>
-                                <th>Deductions</th>
-                                <th>Net Salary</th>
-                                <th>Pay Date</th>
+                                <th>Leave Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
                                 <th>option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($payrolls as $payroll)
+                            @foreach ($leaveRequests as $leaveRequest)
                                 
                             <tr>
-                                <td>{{ $payroll->employee->fullname}}</td>
-                                <td>{{ number_format($payroll->salary)}}</td>
-                                <td>{{ number_format($payroll->bonuses)}}</td>
-                                <td>{{ number_format($payroll->deductions)}}</td>
-                                <td>{{ number_format($payroll->net_salary)}}</td>
-                                <td>{{ $payroll->pay_date}}</td>
+                                <td>{{ $leaveRequest->employee->fullname}}</td>
+                                <td>{{ $leaveRequest->leave_type}}</td>
+                                <td>{{ $leaveRequest->start_date}}</td>
+                                <td>{{ $leaveRequest->end_date}}</td>
+                                <td>@if ($leaveRequest->status == 'confirmed')
+                                        <span class="text-success">{{ ucfirst($leaveRequest->status) }}</span>
+                                    @elseif($leaveRequest->status == 'rejected')
+                                        <span class="text-danger">{{ ucfirst($leaveRequest->status) }}</span>
+                                    @else
+                                        <span class="text-warning">{{ ucfirst($leaveRequest->status) }}</span>    
+                                    @endif</td>
                                 <td>
-                                   
-                                    <a href="{{ route('payrolls.show', $payroll->id) }}" class="btn btn-info btn-sm">Salary Slip</a>
-                                    <a href="{{ route('payrolls.edit', $payroll->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                     
-                                    <form action="{{ route('payrolls.destroy', $payroll->id) }}" 
+                                    @if ($leaveRequest->status == 'pending' || $leaveRequest->status == 'rejected' )
+                                        <a href="{{ route('leave-requests.confirm', $leaveRequest->id) }}" class="btn btn-success btn-sm">Confirm</a>
+                                    @else
+                                        <a href="{{ route('leave-requests.reject', $leaveRequest->id) }}" class="btn btn-secondary btn-sm">Reject</a>
+                                    @endif
+
+                                    <a href="{{ route('leave-requests.edit', $leaveRequest->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    
+                                    <form action="{{ route('leave-requests.destroy', $leaveRequest->id) }}" 
                                         method="POST" style="display: inline">
                                         @csrf
                                         @method('DELETE')

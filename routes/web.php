@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
@@ -15,6 +16,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// handle leave request
+Route::resource('/leave-requests', LeaveRequestController::class);
+Route::get('leave-requests/confirm/{id}', [LeaveRequestController::class, 'confirm'])->name('leave-requests.confirm');
+Route::get('leave-requests/reject/{id}', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 
 // handle payrolls
 Route::resource('/payrolls', PayrollController::class);
