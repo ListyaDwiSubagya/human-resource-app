@@ -55,7 +55,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('payroll', function (Blueprint $table) {
+        Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees');
             $table->decimal('salary', 10, 2);
@@ -78,7 +78,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('leave_request', function (Blueprint $table) {
+        Schema::create('leave_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees');
             $table->string(column: 'leave_type');

@@ -102,7 +102,7 @@ class HumanResourceSeeder extends Seeder
         ]);
 
         // Seed Payroll table
-        DB::table('payroll')->insert([
+        DB::table('payrolls')->insert([
             [
                 'employee_id' => 1, // John Doe
                 'salary' => $faker->randomFloat(2, 4000, 6000),
@@ -148,7 +148,7 @@ class HumanResourceSeeder extends Seeder
         ]);
 
         // Seed Leave Requests table
-        DB::table('leave_request')->insert([
+        DB::table('leave_requests')->insert([
             [
                 'employee_id' => 1, // John Doe
                 'leave_type' => 'Sick Leave',
