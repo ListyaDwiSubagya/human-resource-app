@@ -14,14 +14,14 @@
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/iconly.css') }}">
-    <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/simple-datatables/style.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/table-datatables.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/simple-datatables/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/table-datatables.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 
 <body>
     <script src="{{ asset('mazer/dist/assets/static/js/initTheme.js') }}"></script>
-   
+
     <div id="app">
         <div id="sidebar">
             <div class="sidebar-wrapper active">
@@ -68,59 +68,101 @@
                     </div>
                 </div>
                 <div class="sidebar-menu">
+                    @php
+                        $employee = auth()->user()->employee ?? null;
+                        $role = $employee?->role?->title;
+                    @endphp
+
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item active ">
-                            <a href="index.html" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
+                        @if ($role === 'HR')
+                            <li class="sidebar-item active ">
+                                <a href="index.html" class='sidebar-link'>
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('tasks.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Tasks</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('employees.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Employees</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('departments.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-briefcase"></i>
+                                    <span>Departments</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('roles.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-tag"></i>
+                                    <span>Roles</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('presences.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-table"></i>
+                                    <span>Presences</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('payrolls.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-currency-dollar"></i>
+                                    <span>Payrolls</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('leave-requests.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-shift-fill"></i>
+                                    <span>Leave Requests</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (in_array($role, ['Developer', 'Manager', 'Salesperson']))
+                            <li class="sidebar-item active ">
+                                <a href="index.html" class='sidebar-link'>
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('tasks.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Tasks</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-item ">
+                                <a href="{{ route('presences.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-table"></i>
+                                    <span>Presences</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('payrolls.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-currency-dollar"></i>
+                                    <span>Payrolls</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="{{ route('leave-requests.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-shift-fill"></i>
+                                    <span>Leave Requests</span>
+                                </a>
+                            </li>
+                        @endif
+
                         <li class="sidebar-item ">
-                            <a href="{{ route('tasks.index') }}" class='sidebar-link'>
-                                <i class="bi bi-check-circle-fill"></i>
-                                <span>Tasks</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="{{ route('employees.index') }}" class='sidebar-link'>
-                                <i class="bi bi-people-fill"></i>
-                                <span>Employees</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="{{ route('departments.index') }}" class='sidebar-link'>
-                                <i class="bi bi-briefcase"></i>
-                                <span>Departments</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="{{ route('roles.index') }}" class='sidebar-link'>
-                                <i class="bi bi-tag"></i>
-                                <span>Roles</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="{{ route('presences.index') }}" class='sidebar-link'>
-                                <i class="bi bi-table"></i>
-                                <span>Presences</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="{{ route('payrolls.index') }}" class='sidebar-link'>
-                                <i class="bi bi-currency-dollar"></i>
-                                <span>Payrolls</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="{{ route('leave-requests.index') }}" class='sidebar-link'>
-                                <i class="bi bi-shift-fill"></i>
-                                <span>Leave Requests</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="{{ url('/logout') }}" class='sidebar-link'>
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Logout</span>
                             </a>
@@ -131,7 +173,7 @@
             </div>
         </div>
         <div id="main">
-           
+
             @yield('content')
 
             <footer>
@@ -156,7 +198,7 @@
     <!-- Need: Apexcharts -->
     <script src="{{ asset('mazer/dist/assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('mazer/dist/assets/static/js/pages/dashboard.js') }}"></script>
-    
+
     {{-- dibuthkan untuk handle datables --}}
     <script src="{{ asset('mazer/dist/assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
     <script src="{{ asset('mazer/dist/assets/static/js/pages/simple-datatables.js') }}"></script>

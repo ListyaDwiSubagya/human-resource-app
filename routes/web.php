@@ -17,30 +17,32 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// handle leave request
-Route::resource('/leave-requests', LeaveRequestController::class);
-Route::get('leave-requests/confirm/{id}', [LeaveRequestController::class, 'confirm'])->name('leave-requests.confirm');
-Route::get('leave-requests/reject/{id}', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
+Route::middleware('auth')->group(function () {
 
-// handle payrolls
-Route::resource('/payrolls', PayrollController::class);
+    // ========== ROUTES TANPA MIDDLEWARE ROLE (UNTUK SEMUA USER) ==========
+    // Hapus middleware role dari routes berikut:
+    Route::resource('leave-requests', LeaveRequestController::class);
+    Route::resource('payrolls', PayrollController::class);
+    Route::resource('presences', PresenceController::class);
+    Route::resource('tasks', TaskController::class);
+    
+    Route::get('/tasks/done/{task}', [TaskController::class, 'done'])->name('tasks.done');
+    Route::get('/tasks/pending/{task}', [TaskController::class, 'pending'])->name('tasks.pending');
 
-// handle presence
-Route::resource('/presences', PresenceController::class);
+    // ========== ROUTES DENGAN MIDDLEWARE ROLE (KHUSUS) ==========
+    // Hanya untuk HR
+    Route::middleware('role:HR')->group(function () {
+        Route::get('leave-requests/confirm/{leaveRequest}', [LeaveRequestController::class, 'confirm'])
+            ->name('leave-requests.confirm');
+        Route::get('leave-requests/reject/{leaveRequest}', [LeaveRequestController::class, 'reject'])
+            ->name('leave-requests.reject');
+            
+        Route::resource('roles', RoleController::class);
+        Route::resource('departments', DepartmentController::class);
+        Route::resource('employees', EmployeeController::class);
+    });
 
-// handle roles
-Route::resource('/roles', RoleController::class);
-
-// handle departments
-Route::resource('/departments', DepartmentController::class);
-
-// handle employee
-Route::resource('/employees', EmployeeController::class);
-
-// handle tasks
-Route::resource('/tasks', TaskController::class);
-Route::get('/tasks/done/{id}', [TaskController::class, 'done'])->name('tasks.done');
-Route::get('/tasks/pending/{id}', [TaskController::class, 'pending'])->name('tasks.pending');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
