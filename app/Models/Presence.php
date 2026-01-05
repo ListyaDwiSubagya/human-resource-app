@@ -21,7 +21,7 @@ class Presence extends Model
     protected $casts = [
         'check_in'  => 'datetime',
         'check_out' => 'datetime',
-        'date'      => 'date',
+        'date'      => 'datetime',
     ];
 
     public function employee() {

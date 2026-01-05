@@ -34,6 +34,12 @@
                 </div>
                 <div class="card-body">
 
+                     @php
+                        $employee = auth()->user()->employee ?? null;
+                        $role = $employee?->role?->title;
+                    @endphp
+
+                    @if ($role === 'HR')
                     <form action="{{ route('presences.store') }}" method="POST">
                         @csrf
              
@@ -91,12 +97,74 @@
                         <a href="{{ route('presences.index') }}" class="btn btn-secondary">Back to List</a>
 
                     </form>
+                    @else
+                    {{-- form mode karyawan --}}
+                    <form action="{{ route('presences.store') }}" method="POST">
+
+                        @csrf
+                        
+                        <div class="mb-3"><b>Note</b> : Mohon izinkan akses lokasi, supaya presensi diterima</div>
+                        
+                        <div class="mb-3">
+                            <label for="" class="form-label">Latitude</label>
+                            <input type="text" class="form-control " name="latitude" id="latitude" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Longitude</label>
+                            <input type="text" class="form-control " name="longitude" id="longitude" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <iframe class=""  width="500" height="300"  src="no" frameborder="0" srcdoc=""></iframe>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="btn-present" disabled>Present</button>
+                    </form>
+
+                    @endif
                 </div>
             </div>
 
         </section>
     </div>
+
+    <script>
+        const iframe = document.querySelector('iframe');
+        const officeLat = -7.3697672;
+        const officeLon = 112.5125893;
+        const threshold = 0.01;
+
+        navigator.geolocation.getCurrentPosition(function(position){
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            iframe.src = `https://www.google.com/maps?q=${lat},${lon}&output=embed`;
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lon;
+
+                    // compare lokasi sekarang dengan lokasi kantor
+                    const distance = Math.sqrt(Math.pow(lat - officeLat, 2) + Math.pow(lon - officeLon, 2));
+
+                    if (distance <= threshold) {
+                        alert('Anda berada di kantor, selamat bekerja')
+                        document.getElementById('btn-present').removeAttribute('disabled');
+                    } else {
+                        alert('kamu tidak berada di kantor, pastikan kamu berada di kantor untuk melakukan presensi')
+                    }
+                });
+            }
+        });
+    </script>
 @endsection
+
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

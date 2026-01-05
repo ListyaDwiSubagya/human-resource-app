@@ -9,11 +9,19 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     public function index(){
-        $tasks = Task::all();
 
-        // dd($tasks);
+        $user = auth()->user();
+        $employee = $user->employee;
+        $role = $employee?->role?->title;
+
+        if ($role === 'HR') {
+            $tasks = Task::all();
+        } else {
+            $tasks = Task::where('assigned_to', $employee->id)->get();
+        }
 
         return view('tasks.index', compact('tasks'));
+
     }
 
     public function create() {

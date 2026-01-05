@@ -34,6 +34,11 @@
                 </div>
                 <div class="card-body">
 
+                    @php
+                        $employee = auth()->user()->employee ?? null;
+                        $role = $employee?->role?->title;
+                    @endphp
+
                     <div class="d-flex">
                         <a href="{{ route('presences.create') }}" class="btn btn-primary mb-3 ms-auto">New Presence</a>
                     </div>
@@ -50,7 +55,9 @@
                                 <th>Check Out</th>
                                 <th>Date</th>
                                 <th>Status</th>
+                                @if ($role === 'HR')
                                 <th>option</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -71,6 +78,8 @@
                                 </td>
                               
                                 <td>
+
+                                     @if ($role === 'HR')
                                    
                                     <a href="{{ route('presences.edit', $presence->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                     
@@ -80,6 +89,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
 
