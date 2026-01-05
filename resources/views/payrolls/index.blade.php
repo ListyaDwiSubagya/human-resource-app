@@ -34,9 +34,16 @@
                 </div>
                 <div class="card-body">
 
+                    @php
+                        $employee = auth()->user()->employee ?? null;
+                        $role = $employee?->role?->title;
+                    @endphp
+
                     <div class="d-flex">
-                        <a href="{{ route('payrolls.create') }}" class="btn btn-primary mb-3 ms-auto">New Payroll</a>
-                    </div>
+                        @if ($role === 'HR')
+                            <a href="{{ route('payrolls.create') }}" class="btn btn-primary mb-3 ms-auto">New Payroll</a>
+                        @endif
+                        </div>
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
@@ -67,14 +74,16 @@
                                 <td>
                                    
                                     <a href="{{ route('payrolls.show', $payroll->id) }}" class="btn btn-info btn-sm">Salary Slip</a>
-                                    <a href="{{ route('payrolls.edit', $payroll->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    
-                                    <form action="{{ route('payrolls.destroy', $payroll->id) }}" 
-                                        method="POST" style="display: inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                    @if ($role === 'HR')
+                                        <a href="{{ route('payrolls.edit', $payroll->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        
+                                        <form action="{{ route('payrolls.destroy', $payroll->id) }}" 
+                                            method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
 

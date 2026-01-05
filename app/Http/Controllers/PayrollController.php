@@ -9,8 +9,20 @@ use Illuminate\Http\Request;
 class PayrollController extends Controller
 {
     public function index() {
+
+        $user = auth()->user();
+        $employee = $user->employee;
+
+        if (!$employee) {
+            abort(403, 'Employee data not found');
+        }
         
-        $payrolls = Payroll::all(); 
+        $role = $employee->role?->title;
+
+        if ($role === 'HR'){
+            $payrolls = Payroll::all(); 
+        } else
+            $payrolls = Payroll::where('employee_id', $employee->id)->get();
 
         return view('payrolls.index', compact('payrolls'));
     }
