@@ -40,7 +40,7 @@ class PresenceController extends Controller
     }
 
     public function store(Request $request) {
-         $user = auth()->user();
+        $user = auth()->user();
         $employee = $user->employee;
 
         if (!$employee) {

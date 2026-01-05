@@ -10,7 +10,20 @@ class LeaveRequestController extends Controller
 {
     public function index() {
 
-        $leaveRequests = LeaveRequest::all();
+        $user = auth()->user();
+        $employee = $user->employee;
+
+        if (!$employee) {
+            abort(403, 'Employee data not found');
+        }
+        
+        $role = $employee->role?->title;
+
+         if ($role === 'HR'){
+             $leaveRequests = LeaveRequest::all();
+         } else {
+            $leaveRequests = LeaveRequest::where('employee_id', $employee->id)->get();
+         }
 
         return view('leave-requests.index', compact('leaveRequests'));
     }
@@ -22,18 +35,39 @@ class LeaveRequestController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate([
-            'employee_id' => 'required',
-            'leave_type' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date'
-        ]);
+        
+         $user = auth()->user();
+        $employee = $user->employee;
 
-        $request->merge([
-            'status' => 'pending'
-        ]);
+        if (!$employee) {
+            abort(403, 'Employee data not found');
+        }
 
-        LeaveRequest::create($request->all());
+        $role = $employee->role?->title;
+
+        if ($role === 'HR') {
+        
+            $request->validate([
+                'employee_id' => 'required',
+                'leave_type' => 'required|string',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date'
+            ]);
+
+            $request->merge([
+                'status' => 'pending'
+            ]);
+
+            LeaveRequest::create($request->all());
+        } else {
+            LeaveRequest::create([
+                'employee_id' => $employee->id,
+                'leave_type' => $request->leave_type,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date, 
+                'status' => 'pending'
+            ]);
+        }
 
         return redirect()->route('leave-requests.index')->with('success','Leave Request Created Successfully');
     }

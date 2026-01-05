@@ -34,6 +34,11 @@
                 </div>
                 <div class="card-body">
 
+                    @php
+                        $employee = auth()->user()->employee ?? null;
+                        $role = $employee?->role?->title;
+                    @endphp
+
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>
@@ -47,21 +52,21 @@
 
                     <form action="{{ route('leave-requests.store') }}" method="POST">
                         @csrf
-             
-                        <div class="mb-3">
-                            <label for="" class="form-label">Employee</label>
-                                <select name="employee_id" required class="form-control">
+                        @if ($role === 'HR')
+                            <div class="mb-3">
+                                <label for="" class="form-label">Employee</label>
+                                    <select name="employee_id" required class="form-control">
 
-                                    @foreach ($employees as $employee )
-                                        <option value="{{ $employee->id }}">{{ $employee->fullname }}</option>
-                                    @endforeach
-                                   
-                                </select>
-                            @error('employee_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
+                                        @foreach ($employees as $employee )
+                                            <option value="{{ $employee->id }}">{{ $employee->fullname }}</option>
+                                        @endforeach
+                                    
+                                    </select>
+                                @error('employee_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif
                         <div class="mb-3">
                             <label for="" class="form-label">Leave Type</label>
                                 <select name="leave_type" required class="form-control">

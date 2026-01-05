@@ -34,6 +34,11 @@
                 </div>
                 <div class="card-body">
 
+                    @php
+                        $employee = auth()->user()->employee ?? null;
+                        $role = $employee?->role?->title;
+                    @endphp
+
                     <div class="d-flex">
                         <a href="{{ route('leave-requests.create') }}" class="btn btn-primary mb-3 ms-auto">New Leave Request</a>
                     </div>
@@ -50,7 +55,9 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Status</th>
-                                <th>option</th>
+                                @if ($role === 'HR')
+                                    <th>option</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -69,21 +76,23 @@
                                         <span class="text-warning">{{ ucfirst($leaveRequest->status) }}</span>    
                                     @endif</td>
                                 <td>
-                                    
-                                    @if ($leaveRequest->status == 'pending' || $leaveRequest->status == 'rejected' )
-                                        <a href="{{ route('leave-requests.confirm', $leaveRequest->id) }}" class="btn btn-success btn-sm">Confirm</a>
-                                    @else
-                                        <a href="{{ route('leave-requests.reject', $leaveRequest->id) }}" class="btn btn-secondary btn-sm">Reject</a>
-                                    @endif
 
-                                    <a href="{{ route('leave-requests.edit', $leaveRequest->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    
-                                    <form action="{{ route('leave-requests.destroy', $leaveRequest->id) }}" 
-                                        method="POST" style="display: inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                    @if ($role === 'HR') 
+                                        @if ($leaveRequest->status == 'pending' || $leaveRequest->status == 'rejected' )
+                                            <a href="{{ route('leave-requests.confirm', $leaveRequest->id) }}" class="btn btn-success btn-sm">Confirm</a>
+                                        @else
+                                            <a href="{{ route('leave-requests.reject', $leaveRequest->id) }}" class="btn btn-secondary btn-sm">Reject</a>
+                                        @endif
+
+                                        <a href="{{ route('leave-requests.edit', $leaveRequest->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        
+                                        <form action="{{ route('leave-requests.destroy', $leaveRequest->id) }}" 
+                                            method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
 
