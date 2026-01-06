@@ -131,8 +131,8 @@
 
     <script>
         const iframe = document.querySelector('iframe');
-        const officeLat = -7.3697672;
-        const officeLon = 112.5125893;
+        const officeLat = -7.0057984;
+        const officeLon = 110.4576512;
         const threshold = 0.01;
 
         navigator.geolocation.getCurrentPosition(function(position){

@@ -15,10 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['role:HR, Developer, Salesperson, Manager']);
 
 Route::middleware('auth')->group(function () {
-
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // ========== ROUTES TANPA MIDDLEWARE ROLE (UNTUK SEMUA USER) ==========
     // Hapus middleware role dari routes berikut:
     Route::resource('leave-requests', LeaveRequestController::class);
